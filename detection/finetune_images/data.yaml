@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['bowl']
+
+roboflow:
+  workspace: kartikeyas-workspace-rmmfo
+  project: kartikeyas-workspace-rmmfo
+  version: dataset
+  license: Private
+  url: https://app.roboflow.com/kartikeyas-workspace-rmmfo/kartikeyas-workspace-rmmfo/dataset

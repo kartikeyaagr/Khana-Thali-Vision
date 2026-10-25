@@ -1,0 +1,37 @@
+[project]
+name = "khana-thali-vision"
+version = "1.0.0"
+description = "Indian dish classification on the Khana dataset, thali compartment detection, and top-down view correction."
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.6.0",
+    "torchvision>=0.21.0",
+    "timm>=1.0.3",
+    "ultralytics>=8.3.0",
+    "opencv-python>=4.10.0",
+    "numpy>=1.26.0",
+    "pillow>=10.4.0",
+    "rich>=13.7.1",
+    "scikit-learn>=1.5.0",
+    "matplotlib>=3.9.0",
+]
+
+[project.optional-dependencies]
+# Retraining (Task 1 classifier, Task 2 detector) and the diffusion baseline
+train = [
+    "mlflow>=2.14.0",
+    "albumentations>=2.0.8",
+    "diffusers>=0.30.0",
+    "transformers>=4.44.0",
+    "accelerate>=0.33.0",
+]
+
+# CUDA 12.8 wheels on Linux/Windows; macOS has no CUDA builds, so it uses PyPI (MPS/CPU).
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]
+torchvision = [{ index = "pytorch-cu128", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]

@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+.venv/
+.DS_Store
+
+# Weights are release assets, fetched by run_all.sh
+models/
+*.pt
+
+# Dataset and generated files
+khana/
+splits/
+outputs/
+runs/
+finetune_split/
+mlruns/
+mlruns.db
+corners.json
+
+# Private planning notes
+docs/
+tasks/
