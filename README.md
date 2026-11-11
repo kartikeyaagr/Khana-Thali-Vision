@@ -1,6 +1,22 @@
-# Khana Thali Vision
+<img src="assets/header.svg" width="100%" alt="Khana Thali Vision" />
 
-Recognise the dishes on an Indian thali from a photo, in three stages:
+<p align="center">
+  <b>Recognise the dishes on an Indian thali from a photo.</b><br>
+  <sub>95.78% top-1 on 80 dishes (classifier alone) · PyTorch, timm, YOLOv8, OpenCV · Spring 2026, Computer Vision CS-4912, Ashoka University</sub>
+</p>
+
+### at a glance
+
+```yaml
+what:    photo of a thali in, a label for every compartment out
+result:  95.78% top-1 test accuracy for the dish classifier alone (80 classes), not end-to-end thali accuracy
+stages:  [classify a dish, detect compartments, correct the viewing angle]
+stack:   [PyTorch, timm, YOLOv8, OpenCV]
+data:    Khana dataset, 131K images
+built:   Spring 2026 · solo course project (Computer Vision CS-4912, Ashoka University)
+```
+
+Three stages:
 
 1. **Classify** a single dish into one of 80 classes. ConvNeXt-Small fine-tuned on the
    [Khana dataset](https://arxiv.org/abs/2509.06006) (131K images): **95.78% top-1** on the test set.
@@ -10,7 +26,7 @@ Recognise the dishes on an Indian thali from a photo, in three stages:
 
 ![Task 2 output: each compartment boxed and labelled](assets/task2-example.jpg)
 
-## Run it
+### run it
 
 Requires [uv](https://docs.astral.sh/uv/). On first run the script downloads the two model files
 (793 MB classifier, 6 MB detector) from this repo's [v1.0 release](https://github.com/kartikeyaagr/Khana-Thali-Vision/releases/tag/v1.0).
@@ -36,7 +52,7 @@ needs `khana/` and a CUDA GPU; the detector trains on CUDA, Apple Silicon or CPU
 
 Runs on macOS (MPS), Linux/Windows (CUDA 12.8) or CPU.
 
-## Task 1: dish classification
+### task 1: dish classification
 
 Two-phase fine-tune of `convnext_small.fb_in22k_ft_in1k`, tracking an EMA of the weights throughout:
 
@@ -82,7 +98,7 @@ uv run --extra train mlflow ui --backend-store-uri sqlite:///mlruns.db
 `classification/diffusion_classify.py` is a zero-shot baseline that scores classes by
 Stable Diffusion 2.1 reconstruction error (`uv sync --extra train` first).
 
-## Task 2: thali compartment detection
+### task 2: thali compartment detection
 
 `thali/detector.py` tries three detectors in order and stops at the first that returns boxes:
 
@@ -103,7 +119,7 @@ uv run --extra train python -m detection.finetune  # retrain → models/thali_de
 `detection.evaluate` scores label precision/recall per image (boxes are ignored). Ground truth is
 `{"image.jpg": ["rice", "dal"]}` or `{"image.jpg": [{"label": "rice"}]}`.
 
-## Task 3: top-down view correction
+### task 3: top-down view correction
 
 1. Find the tray's four corners: Otsu threshold, then GrabCut, then Canny edges. A quad that spans
    the whole image is rejected and the next method is tried.
@@ -119,7 +135,7 @@ The script prints a foreshortening ratio (top edge / bottom edge) per image: 1.0
 Below 0.3 the far edge has too few pixels to recover and the warp is visibly stretched; reshooting
 at 45° or steeper fixes that. A tray the same colour as the surface under it can defeat all three corner detectors.
 
-## Layout
+### layout
 
 ```
 run_all.sh          one command for everything
@@ -130,9 +146,11 @@ thali/              shared detector + classifier + visualisation used by Tasks 2
 data/               80 class names, sample thalis, data/angled/ for Task 3 inputs
 ```
 
-## Credits
+### credits
 
 The Khana dataset is by Omkar Prabhu ([arXiv:2509.06006](https://arxiv.org/abs/2509.06006)).
 This repo trains on it; the paper is theirs.
 
 This project was originally three repos, one per task; they're merged here with their code unchanged except for paths and bug fixes.
+
+<img src="assets/footer.svg" width="100%" alt="" />
